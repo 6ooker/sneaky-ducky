@@ -5,7 +5,7 @@ import supervisor
 from adafruit_hid.keyboard import Keyboard
 from keyboard_layout_win_de import KeyboardLayout
 from statuslight import Spinner
-import di as ducky
+import ducky
 from touchio import TouchIn
 from board import TOUCH1
 
