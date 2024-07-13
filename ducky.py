@@ -20,14 +20,14 @@ Implementation Notes
 from adafruit_hid.keyboard import Keyboard
 import time
 
-# from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS as KeyboardLayout
-# from adafruit_hid.keycode import Keycode
+from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS as KeyboardLayout
+from adafruit_hid.keycode import Keycode
 
-from keyboard_layout_win_de import KeyboardLayout
-from keycode_win_de import Keycode
+# from keyboard_layout_win_de import KeyboardLayout
+# from keycode_win_de import Keycode
 
 __version__ = "0.0.0+auto.0"
-__repo__ = "<repo>"
+__repo__ = "https://github.com/6ooker/sneaky-ducky"
 
 commands = {
     'WINDOWS': Keycode.WINDOWS, 'GUI': Keycode.GUI, 'WIN': Keycode.WINDOWS,
@@ -142,7 +142,6 @@ class Ducky:
 
         if command == "REPEAT":
             self.repeat = int(words[1])
-            # time.sleep(float(self.default_delay)/1000)
             return True
 
         self.prev_line = line

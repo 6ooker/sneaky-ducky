@@ -16,13 +16,6 @@ trigger.threshold = 3000
 status = trigger.value
 dev_name = "RubberDucky"
 
-# testing stuff ---------------
-# rval = trigger.raw_value
-# tval = trigger.threshold
-
-# print(rval)
-# print(tval)
-# -----------------------------
 
 if(status == True):
     # Programming mode
