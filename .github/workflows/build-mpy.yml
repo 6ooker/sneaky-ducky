@@ -30,7 +30,7 @@ jobs:
           pip install mpy-cross
       - name: Display mpy help
         run: |
-          mpy-cross -v
+          mpy-cross --version
       - name: Show local fs
         run: |
           ls -a
