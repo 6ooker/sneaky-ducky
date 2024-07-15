@@ -1,0 +1,33 @@
+name: build-mpy
+
+on: workflow_dispatch
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Versions
+        run: |
+          python3 --version
+      - name: Checkout current repo
+        uses: actions/checkout@v4
+        with:
+          filter: 'blob:none'
+          depth: 0
+      - name: Install requirements
+        run: |
+          sudo apt-get update
+          sudo apt-get install libudev-dev libusb-1.0
+          sudo apt-get install -y gettext
+          pip install mpy-cross
+      - name: Display mpy help
+        run: |
+          mpy-cross --help
