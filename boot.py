@@ -1,5 +1,5 @@
 # type: ignore
-from board import *
+from board import NEOPIXEL, TOUCH1
 import touchio
 import storage
 import neopixel
@@ -9,14 +9,14 @@ import usb_hid
 
 pixels = neopixel.NeoPixel(NEOPIXEL, 4)
 
-status = False
-trigger = touchio.TouchIn(TOUCH1)   # we are using TOUCH1 (CP Name from board) as the programming pin
-trigger.threshold = 3000            # threshold needs to be manually set to ~3000 to not get false-positive readings
-status = trigger.value
+programmingStatus = False
+programmingPin = touchio.TouchIn(TOUCH1)   # we are using TOUCH1 (CP Name from board) as the programming pin
+programmingPin.threshold = 3000            # threshold needs to be manually set to ~3000 to not get false-positive readings
+programmingStatus = programmingPin.value
 
 dev_name = "RubberDucky" # just the name for the data drive the board will be visible as
 
-if(status == True):
+if(programmingStatus == True):
     # Programming mode
     pixels.fill(0xff00ff)
     storage.enable_usb_drive()                  # show up as a USB mass storage device

@@ -1,19 +1,37 @@
-"""
-`ducky`
-==================================================
+"""Provides a class to run Ducky-like script.
 
-Library for interpreting and running Ducky-like script files
+Returns:
+    object: Instance of a Ducky-class object
 
-* Author(s): Erik Katzenberger
+**Quickstart: Importing and using the class**
 
-Implementation Notes
---------------------
+    First, importing libraries
+    
+    ```py
+    import time
+    import usb_hid
+    from adafruit_hid.keyboard import Keyboard
+    from adafruit_hid.keyboard_layout import KeyboardLayout
+    import ducky
+    ```
+    
+    Next, define the keyboard layout and initialze the `Ducky` class.
+    
+    ```py
+    time.sleep(1)
+    keyboard = Keyboard(usb_hid.devices)
+    layout = KeyboardLayout(keyboard)
 
-**Software and Dependencies**
-
-* Adafruit CircutPython firmware for supported boards:
-  https://github.com/adafruit/circuitpython/releases
-
+    duck = ducky.Ducky('payload.dd', keyboard, layout) # you will additionally need a commands dict
+    ```
+    
+    Now you can run `runScript()` in a loop, which will execute the script line by line.
+    
+    ```py
+    status = True
+    while status is not False:
+        status = duck.runScript()
+    ```
 """
 
 # imports
@@ -22,40 +40,7 @@ from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keyboard_layout_base import KeyboardLayoutBase
 
 class Ducky:
-    """
-    Class that runs a Ducky-like script file.
-
-    **Quickstart: Importing and using the library**
-
-        An example of using the :class:`Ducky` class.
-        First, import the libraries
-
-            .. code-block:: python
-
-            import time
-            import usb_hid
-            from adafruit_hid.keyboard import Keyboard
-            from adafruit_hid.keyboard_layout import KeyboardLayout
-            import ducky
-
-        Once done, define the keyboard layout and initialize the :class:`Ducky` class.
-
-            .. code-block:: python
-
-            time.sleep(1)
-            keyboard = Keyboard(usb_hid.devices)
-            layout = KeyboardLayout(keyboard)
-
-            duck = ducky.Ducky('payload.dd', keyboard, layout)
-
-        Now you can run a loop to run the script line by line, per each iteration, via `runScript`.
-
-            .. code-block:: python
-
-            status = True
-            while status is not False:
-                status = duck.runScript()
-
+    """Class that runs a Ducky-like script file.
     """
 
 
@@ -78,7 +63,11 @@ class Ducky:
 
 
     def write_key(self, key: str) -> None:
-        """Writes keys over HID. Also used with more complicated commands."""
+        """Writes keys over HID. Also used with more complicated commands.
+
+        Args:
+            key (str): The string or command which to write
+        """
         if key in self.commands:
             self.keyboard.press(self.commands[key])
         else:
@@ -86,7 +75,11 @@ class Ducky:
 
 
     def runScript(self) -> bool:
-        """Function that sends a line of provided script file over HID every time it is called."""
+        """Function that sends a line of provided script file over HID every time it is called.
+
+        Returns:
+            bool: False once the script has no more lines and ends.
+        """
 
         now = time.monotonic()
         if now < self.wait:
