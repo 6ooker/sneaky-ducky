@@ -10,7 +10,19 @@ concurrency:
 jobs:
   scheduler:
     runs-on: ubuntu-22.04
+    outputs:
+      cp-version: ${{ steps.set-up-submodules.outputs.version }}
     steps:
+      - name: Dump GitHub context
+        run: echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+      - name: Set up repo
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+          show-progress: false
+          fetch-depth: 1
       - name: Set up python
         uses: actions/setup-python@v5
         with:
