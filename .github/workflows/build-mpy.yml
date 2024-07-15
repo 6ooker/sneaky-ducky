@@ -3,7 +3,7 @@ name: build-mpy
 on: workflow_dispatch
 
 jobs:
-  build-and-test:
+  setup-mpy:
     runs-on: ubuntu-latest
     steps:
       - name: Dump GitHub context
@@ -31,6 +31,27 @@ jobs:
       - name: Display mpy help
         run: |
           mpy-cross --version
-      - name: Show local fs
+        
+  run-and-upload:
+    name: Run mpy on ducky
+    runs-on: ubuntu-latest
+    needs: setup-mpy
+    steps:
+      - name: mpy ducky
         run: |
-          ls -a
+          mpy-cross ducky.py
+      - name: Upload output file
+        uses: actions/upload-artifact@v4
+        with:
+          name: ducky-mpy
+          path: ducky.mpy
+    
+  now-download:
+    name: Download Artifact
+    runs-on: ubuntu-latest
+    needs: run-and-upload
+    steps:
+      - name: Download single artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ducky-mpy
