@@ -31,12 +31,6 @@ jobs:
       - name: Display mpy help
         run: |
           mpy-cross --version
-        
-  run-and-upload:
-    name: Run mpy on ducky
-    runs-on: ubuntu-latest
-    needs: setup-mpy
-    steps:
       - name: mpy ducky
         run: |
           mpy-cross ducky.py
@@ -49,7 +43,7 @@ jobs:
   now-download:
     name: Download Artifact
     runs-on: ubuntu-latest
-    needs: run-and-upload
+    needs: setup-mpy
     steps:
       - name: Download single artifact
         uses: actions/download-artifact@v4
