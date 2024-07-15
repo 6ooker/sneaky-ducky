@@ -3,7 +3,7 @@ import time
 import usb_hid
 import supervisor
 from adafruit_hid.keyboard import Keyboard
-from keyboard_layout_win_de import KeyboardLayout
+from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS as KeyboardLayout
 # from keyboard_layout_win_de import KeyboardLayout
 from statuslight import Spinner
 import ducky

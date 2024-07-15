@@ -61,7 +61,7 @@ This project uses the `.mpy` version due to the limited memory available on SAMD
 
 ### Code adjustments
 
-At the start of `ducky.py` and `code.py` comment out these lines:
+At the start of `commands.py` and `code.py` comment out these lines:
 
 ```py
 from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS as KeyboardLayout
