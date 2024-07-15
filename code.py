@@ -9,14 +9,14 @@ from statuslight import Spinner
 import ducky
 from touchio import TouchIn
 from board import TOUCH1
-from commands
+import commands
 
-switch_pin = TouchIn(TOUCH1)
-switch_pin.threshold = 3000
+switch_pin = TouchIn(TOUCH1)    # we are using TOUCH1 (CP Name from board) as the programming pin
+switch_pin.threshold = 3000     # threshold needs to be manually set to ~3000 to not get false-positive readings
 
 
-time.sleep(1)
-supervisor.runtime.autoreload = False
+time.sleep(1)                           # wait a second to init system
+supervisor.runtime.autoreload = False   # we don't want autoreloads
 
 if switch_pin.value:
     my_color = (160,235,255)

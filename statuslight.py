@@ -1,6 +1,6 @@
 import time
 import neopixel
-from board import *
+from board import NEOPIXEL
 
 class Spinner:
     def __init__(self, num_leds=4, color=(55,200,230), dim_by=50) -> None:

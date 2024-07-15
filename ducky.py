@@ -17,8 +17,8 @@ Implementation Notes
 """
 
 # imports
-from adafruit_hid.keyboard import Keyboard
 import time
+from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keyboard_layout_base import KeyboardLayoutBase
 
 class Ducky:
@@ -85,9 +85,7 @@ class Ducky:
             self.layout.write(key)
 
 
-    def runScript( # pylint: disable=too-many-return-statements
-            self
-                  ) -> bool: # pylint: disable=too-many-branches
+    def runScript(self) -> bool:
         """Function that sends a line of provided script file over HID every time it is called."""
 
         now = time.monotonic()
