@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           filter: 'blob:none'
-          depth: 0
+          fetch-depth: 0
       - name: Install requirements
         run: |
           sudo apt-get update
@@ -30,4 +30,7 @@ jobs:
           pip install mpy-cross
       - name: Display mpy help
         run: |
-          mpy-cross --help
+          mpy-cross -v
+      - name: Show local fs
+        run: |
+          ls -a
