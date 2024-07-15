@@ -19,40 +19,7 @@ Implementation Notes
 # imports
 from adafruit_hid.keyboard import Keyboard
 import time
-
-from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS as KeyboardLayout
-from adafruit_hid.keycode import Keycode
-
-# from keyboard_layout_win_de import KeyboardLayout
-# from keycode_win_de import Keycode
-
-__version__ = "0.0.0+auto.0"
-__repo__ = "https://github.com/6ooker/sneaky-ducky"
-
-commands = {
-    'WINDOWS': Keycode.WINDOWS, 'GUI': Keycode.GUI, 'WIN': Keycode.WINDOWS,
-    'APP': Keycode.APPLICATION, 'MENU': Keycode.APPLICATION, 'SHIFT': Keycode.SHIFT,
-    'ALT': Keycode.ALT, 'CONTROL': Keycode.CONTROL, 'CTRL': Keycode.CONTROL,
-    'DOWNARROW': Keycode.DOWN_ARROW, 'DOWN': Keycode.DOWN_ARROW, 'LEFTARROW': Keycode.LEFT_ARROW,
-    'LEFT': Keycode.LEFT_ARROW, 'RIGHTARROW': Keycode.RIGHT_ARROW, 'RIGHT': Keycode.RIGHT_ARROW,
-    'UPARROW': Keycode.UP_ARROW, 'UP': Keycode.UP_ARROW, 'BREAK': Keycode.PAUSE,
-    'PAUSE': Keycode.PAUSE, 'CAPSLOCK': Keycode.CAPS_LOCK, 'DELETE': Keycode.DELETE,
-    'END': Keycode.END, 'ESC': Keycode.ESCAPE, 'ESCAPE': Keycode.ESCAPE, 'HOME': Keycode.HOME,
-    'INSERT': Keycode.INSERT, 'NUMLOCK': Keycode.KEYPAD_NUMLOCK, 'PAGEUP': Keycode.PAGE_UP,
-    'PAGEDOWN': Keycode.PAGE_DOWN, 'PRINTSCREEN': Keycode.PRINT_SCREEN, 'ENTER': Keycode.ENTER,
-    'SCROLLLOCK': Keycode.SCROLL_LOCK, 'SPACE': Keycode.SPACE, 'TAB': Keycode.TAB,
-    'BACKSPACE': Keycode.BACKSPACE,
-    'A': Keycode.A, 'B': Keycode.B, 'C': Keycode.C, 'D': Keycode.D, 'E': Keycode.E,
-    'F': Keycode.F, 'G': Keycode.G, 'H': Keycode.H, 'I': Keycode.I, 'J': Keycode.J,
-    'K': Keycode.K, 'L': Keycode.L, 'M': Keycode.M, 'N': Keycode.N, 'O': Keycode.O,
-    'P': Keycode.P, 'Q': Keycode.Q, 'R': Keycode.R, 'S': Keycode.S, 'T': Keycode.T,
-    'U': Keycode.U, 'V': Keycode.V, 'W': Keycode.W, 'X': Keycode.X, 'Y': Keycode.Y,
-    'Z': Keycode.Z, 'F1': Keycode.F1, 'F2': Keycode.F2, 'F3': Keycode.F3,
-    'F4': Keycode.F4, 'F5': Keycode.F5, 'F6': Keycode.F6, 'F7': Keycode.F7,
-    'F8': Keycode.F8, 'F9': Keycode.F9, 'F10': Keycode.F10, 'F11': Keycode.F11,
-    'F12': Keycode.F12,
-
-}
+from adafruit_hid.keyboard_layout_base import KeyboardLayoutBase
 
 class Ducky:
     """
@@ -92,9 +59,10 @@ class Ducky:
     """
 
 
-    def __init__(self, filename: str, keyboard: Keyboard, layout: KeyboardLayout) -> None:
+    def __init__(self, filename: str, keyboard: Keyboard, layout: KeyboardLayoutBase, commands: dict) -> None:
         self.keyboard = keyboard
         self.layout = layout
+        self.commands = commands
         self.lines = []
         self.default_delay = 0.0
         self.prev_line = None
@@ -111,13 +79,15 @@ class Ducky:
 
     def write_key(self, key: str) -> None:
         """Writes keys over HID. Also used with more complicated commands."""
-        if key in commands:
-            self.keyboard.press(commands[key])
+        if key in self.commands:
+            self.keyboard.press(self.commands[key])
         else:
             self.layout.write(key)
 
 
-    def runScript(self) -> bool:
+    def runScript( # pylint: disable=too-many-return-statements
+            self
+                  ) -> bool: # pylint: disable=too-many-branches
         """Function that sends a line of provided script file over HID every time it is called."""
 
         now = time.monotonic()
