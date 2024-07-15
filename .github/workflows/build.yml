@@ -1,0 +1,34 @@
+name: Build mpy-files
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || gihub.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  scheduler:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Set up python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+      - name: Set up submodules
+        id: set-up-submodules
+        uses: ./.github/actions/deps/submodules
+        with:
+          action: cache
+          version: true
+      - name: Set up mpy-cross
+        uses: ./.github/actions/mpy_cross
+        with:
+          cp-version: ${{ steps.set-up-submodules.outputs.version }}
+          download: false
+  
+  mpy-cross:
+    needs: scheduler
+    uses: ./.github/workflows/build-mpy-cross.yml
+    with:
+      cp-version: ${{ needs.scheduler.outputs.cp-version }}
